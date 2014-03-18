@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<config>
+    
+    <modules>
+        <Cpfaster>
+            <version>0.1.5</version>
+        </Cpfaster>
+    </modules>
+    
+    
+    
+    
+   
+    <global>
+        
+        
+        <models>
+            <cpfaster>
+                <class>Cpfaster_Model</class>
+                <resourceModel>cpfaster_resource</resourceModel>
+            </cpfaster>
+            <cpfaster_resource>
+                <class>Cpfaster_Model_Resource</class>
+                <entities>
+                        <mpcart>
+                            <table>cpfaster_cart</table>
+                        </mpcart>
+                </entities>
+            </cpfaster_resource>
+        </models>
+
+
+
+        <resources>
+               <cpfaster_setup>
+                    <setup>
+                        <module>Cpfaster</module>
+                         <class>Cpfaster_Model_Resource_Setup</class>
+                    </setup>
+                     <connection>
+                        <use>core_setup</use>
+                    </connection>
+                </cpfaster_setup>
+        </resources>  
+        
+   
+        
+       
+    
+        
+        <helpers>
+            <cpfaster>
+                <class>Cpfaster_Helper</class>
+            </cpfaster>
+        </helpers>
+    
+    
+
+        <blocks>
+            <cpfaster>
+                <class>Cpfaster_Block</class>
+            </cpfaster>
+        </blocks>
+        
+        
+        
+    </global>
+    
+    
+    
+     <default>
+         <payment>
+             <cpfaster>
+                  <active>1</active>
+                  <model>Cpfaster_Model_Faster</model>
+                  <title>Efectivo - ComproPago</title>
+                  <ask_postalcode>0</ask_postalcode>
+                  <change_postalcode>0</change_postalcode>
+                  <url_success>http://[mi-tienda.com]/index.php/checkout/onepage/success/</url_success>
+                  <url_process>http://[mi-tienda.com]/index.php/checkout/onepage/success/</url_process>
+                  <order_status_new>pending</order_status_new>
+                  <order_status_approved>processing</order_status_approved>
+                  <order_status_refunded>pending</order_status_refunded>
+                  <order_status_in_process>pending</order_status_in_process>
+                  <order_status_in_mediation>pending</order_status_in_mediation>
+                  <order_status_rejected>pending</order_status_rejected>
+                  <order_status_cancelled>pending</order_status_cancelled>
+                  <order_status_cancelled>0</order_status_cancelled>
+                  <installments></installments>
+                  <checkout_mode>iframe</checkout_mode>
+                  <auto_create_inovice>0</auto_create_inovice>
+                  <faster_button_checkout>0</faster_button_checkout>
+                  <faster_button_checkout_sidebar>0</faster_button_checkout_sidebar>
+                  <faster_button_product>0</faster_button_product>
+                  <allowspecific>0</allowspecific>
+            </cpfaster>
+        </payment>
+    </default>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     <frontend>
+                
+             <routers>
+                <cpfaster>
+                    <use>standard</use>
+                    <args>
+                        <module>Cpfaster</module>
+                        <frontName>cpfaster</frontName>
+                    </args>
+                </cpfaster>
+            </routers> 
+        
+        
+            <layout>
+
+                <updates>
+                    <cpfaster>
+                        <file>cpfaster.xml</file>
+                    </cpfaster>
+                </updates>
+
+            </layout>
+            
+            <translate>
+            <modules>
+                <compropago>
+                    <files>
+                        <default>compropago.csv</default>
+                    </files>
+                </compropago>
+            </modules>
+            </translate>
+            
+          
+    </frontend>
+    
+    <adminhtml>
+        <translate>
+            <modules>
+                <compropago>
+                    <files>
+                        <default>compropago.csv</default>
+                    </files>
+                </compropago>
+            </modules>
+        </translate>
+    </adminhtml>
+    
+
+</config>

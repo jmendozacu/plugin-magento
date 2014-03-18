@@ -1,0 +1,208 @@
+<?php
+
+
+/** * * NOTICE OF LICENSE * * This source file is subject to the Open Software License (OSL). 
+*  It is also available through the world-wide-web at this URL: *
+*  http://opensource.org/licenses/osl-3.0.php * 
+*  @category    Payment Gateway * @package    	ComproPago
+*  @author      André Fuhrman (andrefuhrman@gmail.com) | Edited: Gabriel Matsuoka (gabriel.matsuoka@gmail.com)
+*  @copyright  Copyright (c) ComproPago [http://www.compropago.com]
+*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0) 
+*/
+class Cpfaster_WebhookController extends Mage_Core_Controller_Front_Action{
+    
+    protected $_return = null;
+    protected $_order = null;
+    protected $_order_id = null;
+    protected $_mpcartid = null;
+    protected $_sendemail = false;
+    protected $_hash = null;
+    
+    public function indexAction(){
+	$params = $this->getRequest()->getParams();
+
+	$body = @file_get_contents('php://input');
+    $event_json = json_decode($body);
+	//echo $event_json->data->object->{'id'};
+	//echo $event_json->{'type'};
+
+	if ($event_json->data->object->{'id'}){
+	    try {
+		//echo 'entra al Try';
+		$ipn = Mage::getModel('cpfaster/Checkout');
+
+		$receive_unique_id = $event_json->data->object->{'id'};
+		$this->_return = $ipn->GetStatusCP($receive_unique_id);
+		if ($this->_return['data']['object']['id'] === $receive_unique_id) {
+			//echo 'Order valida';
+		    $this->_process_order();
+		}else{
+		    echo 'Order not valid';
+		}
+		
+	    } catch (Exception $e) {
+		    Mage::logException($e);
+	    }
+	}
+    
+    } 
+    
+    private function _process_order(){
+	
+	//  $standard = new ComproPago_Model_Standard();
+	$standard = Mage::getModel('cpfaster/Faster');
+	$this->_get_order();
+    
+	$config = Mage::getModel('cpfaster/Faster');
+	
+	if ($this->_return['data']['object']['payment_details']['customer_name'])
+	    $this->_order->setCustomerFirstname($this->_return['data']['object']['payment_details']['customer_name']);
+	if ($this->_return['data']['object']['payment_details']['customer_email'])
+	    $this->_order->setCustomerEmail($this->_return['data']['object']['payment_details']['customer_email']);
+	
+	$this->_order->save();
+	
+	if($this->_sendemail){
+	    $name = $this->_return['data']['object']['payment_details']['customer_name'];
+	    $this->notify($name,$this->_return['data']['object']['payment_details']['customer_email']);
+	}
+	
+	switch ( $this->_return['type'] ) {
+    
+	case 'charge.success':
+	    $createinvoice = Mage::getModel('cpfaster/Faster')->getConfigData('auto_create_inovice');
+	    if ($createinvoice == 1){  
+		// Geração automatica de invoice    
+		// checa para ver se já tem invoice    
+			if(!$this->_order->hasInvoices()){
+			    $invoice = $this->_order->prepareInvoice();   
+			    $invoice->register()->pay();
+			    Mage::getModel('core/resource_transaction')
+			    ->addObject($invoice)
+			    ->addObject($invoice->getOrder())
+			    ->save();
+			    
+			    
+			    $message = 'Payment '.$invoice->getIncrementId().' was created. ComproPago automatically confirmed payment for this order.';
+			    $status = $config->getConfigData('order_status_approved');
+			    $this->_order->addStatusToHistory(
+				$status, //update order status to processing after creating an invoice
+				$message,
+				true
+			    );
+			    $invoice->sendEmail(true, $message);
+			}
+	    } else {
+		// Geração não automática de invoice    
+		$message = 'ComproPago automatically confirmed payment for this order.';
+		$status = $config->getConfigData('order_status_approved');
+		$this->_order->addStatusToHistory(
+		$status, //update order status to processing after creating an invoice
+		$message,
+		true
+		);
+		$this->_order->sendOrderUpdateEmail(true, $message); 
+	    }
+	    break;
+	case 'charge.pending':
+		//echo "entra a pendiente";
+	    $status = $config->getConfigData('order_status_in_process');
+	    $message = 'The user has not completed the payment process yet.';
+	    $this->_order->addStatusToHistory($status, $message);
+	    $this->_order->sendOrderUpdateEmail(true, $message);
+	    break;
+	default:
+	    $status = $config->getConfigData('order_status_in_process');
+	    $message = "";    
+	    $this->_order->addStatusToHistory($status, $message);
+	    $this->_order->sendOrderUpdateEmail(true, $message);
+	}
+	
+	
+	$this->_order->save();
+	//echo "Success Update";
+    }
+    
+    private function _get_order(){
+
+	if ( empty($this->_order) || $this->_order == null ) {
+		
+	    $this->_hash  = $this->_return['data']['object']['payment_details']['product_id'];           
+	    /// if is normal checkout (order is already created)
+	    if (true){
+			$preorder = Mage::getModel('sales/order')->loadByIncrementId($this->_hash); 
+
+	    	//echo $this->_return['data']['object']['payment_details']['product_id'];
+			//echo '---'.$preorder['increment_id'];
+
+			if (isset($preorder['increment_id'])){
+		 	   $this->_order = $preorder;
+			}else{
+			    //echo 'Order not found';
+		    	die;            
+			}
+		// else, if is checkout faster, maybe order is not created
+	    
+	    } else {
+		$mpcart = Mage::getModel('cpfaster/mpcart')->load($this->_hash,'hash');
+		$this->_order_id = $mpcart->getOrderId();
+		$this->_mpcartid = $mpcart->getCpfasterCartId();
+		// If don´t have order, generate a order and send email
+		if(is_null($this->_order_id) || empty($this->order_id)){
+		    $this->_order_id = $mpcart->generateEmptyOrder($this->_mpcartid);  
+		    $preorder = Mage::getModel('sales/order')->loadByIncrementId($this->_order_id); 
+		    if (isset($preorder['increment_id'])){
+			$this->_order = $preorder;
+		    }else{
+			//echo 'Order not found';
+			die;            
+		    }
+		    $this->_sendemail = true;
+		}else{
+		    $preorder = Mage::getModel('sales/order')->loadByIncrementId($this->_order_id); 
+		    if (isset($preorder['increment_id'])){
+			$this->_order = $preorder;
+		    }else{
+			//echo 'Order not found';
+			die;            
+		    }
+		}
+	    }
+	}
+    }
+    
+    
+    
+    public function notify($sendToName, $sendToEmail) {
+	$store = Mage::app()->getStore();
+	$store->getName();
+	$link = '<a href="'. Mage::getBaseUrl() . 'cpfaster/information/address/hash/'.$this->_hash.'">'.Mage::getBaseUrl().'cpfaster/information/address/hash/'.$this->_hash.'</a>';
+	$name = Mage::getStoreConfig('general/store_information/name');
+	$from = Mage::getStoreConfig('trans_email/ident_general/email');
+	$subject = Mage::helper('cpfaster')->__('Complete your order shipping information');
+	$charset = '<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />';
+	$dear = Mage::helper('cpfaster')->__('Thank you for your purchase.');
+	$linha = ' <br /> ';        
+	$information = Mage::helper('cpfaster')->__('To complete your order, if is not done yet, fill the address information at the address below.');
+	$finalmessage = $charset.$dear.$linha.$linha.$information.$linha.$linha.$link;
+	$mail = Mage::getModel('core/email');
+	$mail->setToName($sendToName);
+	$mail->setToEmail($sendToEmail);
+	$mail->setBody($finalmessage);
+	$mail->setSubject('=?utf-8?B?'.base64_encode($subject).'?=');
+	$mail->setFromEmail($from);
+	$mail->setFromName($name);
+	$mail->setType('html');
+	
+	try {
+	    $mail->send();
+	}
+	catch (Exception $e) {
+	    Mage::logException($e);
+	    return false;
+	}
+	
+	return true;
+    }
+
+}

@@ -1,0 +1,405 @@
+<?xml version="1.0"?>
+<!--
+/**
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL).
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+*
+* @category   	Payment Gateway
+* @package    	ComproPago
+* @author      Giovanni Hernandez
+* @copyright  	Copyright (c) ComproPago [http://www.compropago.com]
+* @license    	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*/
+-->
+
+<config>
+	<sections>
+		<payment translate="label" module="payment">
+			<groups>
+				<cpfaster translate="label">
+					<label>ComproPago</label>
+					<sort_order>670</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<active translate="label">
+							<label>Habilitar</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</active>
+						<title translate="label,comment">
+							<label>Título</label>
+							<comment>
+								<![CDATA[
+									Este campo se mostrará como etiqueta de metodo de pago.
+								]]>
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</title>
+
+						<client_secret translate="label">
+							<label>Llave privada</label>
+							<comment>
+								<![CDATA[
+									Obtener en: 
+									<a href="https://www.compropago.com/panel/configuracion" target="_blank">Panel de ComproPago</a> 
+								]]>
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</client_secret>
+
+						<client_id translate="label">
+							<label>Llave pública</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									Obtener en:
+									<a href="https://www.compropago.com/panel/configuracion" target="_blank">Panel de ComproPago</a> 
+								]]>
+							</comment>
+						</client_id>
+						
+
+						<!--
+						<category_id translate="label">
+							<label>Category of your store</label>
+							<frontend_type>select</frontend_type>
+							<source_model>Cpfaster_Model_Source_CategoryId</source_model>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</category_id>
+						-->
+						<acc_origin translate="label">
+							<label>País de la cuenta</label>
+							<frontend_type>select</frontend_type>
+							<source_model>Cpfaster_Model_Source_OriginAccount</source_model>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</acc_origin>
+						<checkout_mode translate="label">
+							<label>Elegir como se mostrara el componente</label>
+							<frontend_type>select</frontend_type>
+							<source_model>Cpfaster_Model_Source_CheckoutMode</source_model>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									Forma en como se muestra la creación de pago.
+								]]>
+							</comment>
+						</checkout_mode>
+						<!--
+						<faster_button_checkout translate="label">
+							<label>Show ShopCart Faster Checkout button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									When this option is enable a faster button is showed on the shopping cart, allowing the client finishing the process much fastar, increasing your store sales
+								]]>
+							</comment>
+						</faster_button_checkout>
+						<faster_button_checkout_sidebar translate="label">
+							<label>Show ShopCart Faster Checkout Sidebar button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									When this option is enable a faster button is showed on the shopping cart sidebar, allowing the client finishing the process much fastar, increasing your store sales
+								]]>
+							</comment>
+						</faster_button_checkout_sidebar>
+						<faster_button_product translate="label">
+							<label>Show Faster Checkout Product button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									When this option is enable a faster button is at each product, allowing the client finishing the process much fastar, increasing your store sales
+								]]>
+							</comment>
+						</faster_button_product>
+						<ask_postalcode translate="label">
+							<label>Postal Code Request on Faster Payment on Faster Checkout</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									Turn this OFF if any of yours shippings methods options have the need to get the postal code
+								]]>                                   
+							</comment>
+						</ask_postalcode>
+						<change_postalcode translate="label">
+							<label>Allow to change postal code after the order is paid on Faster Payment on Faster Checkout</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									The shipping price is calculate usually by PostalCode, if you allow the customer change it after the order is paid, the amount received could not match with the Real Cost
+								]]>
+							</comment>
+						</change_postalcode>
+						
+						<auto_create_inovice translate="label">
+							<label>Auto Create Invoice</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									If is set to false, you gonna need to create manually after a order is aproved
+								]]>
+							</comment>
+						</auto_create_inovice>
+					-->
+						<currency translate="label">
+							<label>Moneda</label>
+							<frontend_type>select</frontend_type>
+							<source_model>Cpfaster_Model_Source_Currency</source_model>
+							<sort_order>14</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</currency>
+						<url_success translate="label">
+							<label>Dirección URL de éxito</label>
+							<comment>
+								<![CDATA[
+									Esta es la URL donde el cliente será redireccionado al completar su orden de pago con exito.
+								]]>
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</url_success>
+						<url_process translate="label, comment">
+							<label>Dirección URL de error</label>
+							<comment>
+								<![CDATA[
+									Esta es la URL donde el cliente será redireccionado si la orden de pago no se pudo crear.<br /><br /> Por favor configura tu<b> Webhook</b> para recibir automaticamente los estados de en: 
+									<a href="https://www.compropago.com/panel/webhooks" target="_blank">Webhooks de ComproPago</a>
+									<br />
+									Configura tu URL siguiendo este ejemplo: <b>http://[mi-tienda.com]/index.php/cpfaster/webhook</b>
+								]]>
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>16</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</url_process>
+						<!--
+						<excluded_payment_methods>
+							<label>Payment Methods what should be excluded</label>
+							<comment>
+								<![CDATA[
+									Use <b>[CTRL]</b> to <b>SELECT</b> more than one payment method to be excluded or <b>DESELECT</b> a payment method.<br /><br />
+									<b>Attention: </b> Payment methods depends on what country your account was created, if you change the country,<b> save the module first</b> and just after that select the Exclude Payment Methods!
+								]]>
+							</comment>
+							<frontend_type>multiselect</frontend_type>
+							<source_model>Cpfaster_Model_Source_ExcludedPaymentMethods</source_model>
+							<sort_order>17</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<can_be_empty>1</can_be_empty>
+						</excluded_payment_methods>
+					
+						<installments>
+							<label>Choose the maximum number of installments accepted</label>
+							<frontend_type>select</frontend_type>
+							<source_model>Cpfaster_Model_Source_Installments</source_model>
+							<sort_order>18</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</installments>
+						-->
+						<order_status_new translate="label">
+							<label>Elegir estado de nuevas ordenes</label>
+							<comment>
+							<![CDATA[
+								Ir a "system -> OrderStatuses" y asignar una nueva orden de estado personalizada en la opción de 'new'.                  
+							]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>19</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_status_new>
+						<order_status_approved translate="label">
+							<label>Elegir estado de ordenes aprovadas</label>
+							<comment>
+								<![CDATA[
+									Ir a "system -> OrderStatuses" y asignar una nueva orden de estado personalizada en la opción de 'new'.
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_status_approved>
+						<!--
+						<order_status_refunded translate="label">
+							<label>Choose the status of refunded orders</label>
+							<comment>
+								<![CDATA[
+									Go to system -> OrderStatuses and assign a new orders status to 'new' order state to custom with your own orders state name                  
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>21</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_status_refunded>
+					-->
+						<order_status_in_process translate="label">
+							<label>Elegir estado de ordenes pendientes</label>
+							<comment>
+								<![CDATA[
+									Ir a "system -> OrderStatuses" y asignar una nueva orden de estado personalizada en la opción de 'new'.
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>22</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_status_in_process>
+						<!--
+						<order_status_in_mediation translate="label">
+							<label>Choose the status when client open a mediation</label>
+							<comment>
+								<![CDATA[
+									Go to system -> OrderStatuses and assign a new orders status to 'new' order state to custom with your own orders state name                  
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>23</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_status_in_mediation>
+						<order_status_rejected translate="label">
+							<label>Choose the status when payment was reject</label>
+							<comment>
+								<![CDATA[
+									Go to system -> OrderStatuses and assign a new orders status to 'new' order state to custom with your own orders state name                  
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>24</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_status_rejected>
+						<order_status_cancelled translate="label">
+							<label>Choose the status when payment was canceled</label>
+							<comment>
+								<![CDATA[
+									Go to system -> OrderStatuses and assign a new orders status to 'new' order state to custom with your own orders state name                  
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_status_cancelled>
+						<sandbox_checkout translate="label">
+							<label>Checkout SandBox</label>
+							<comment>
+								<![CDATA[
+									Sandbox is a checkout only to test
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>26</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</sandbox_checkout>
+						<debug_mode translate="label">
+							<label>Debug Mode</label>
+							<comment>
+								<![CDATA[
+									For security reasons turn on only to fix integrations issues                
+								]]>
+							</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>27</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</debug_mode>-->
+					</fields>
+				</cpfaster>
+			</groups>
+		</payment>
+	</sections>
+</config>
