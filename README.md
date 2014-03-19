@@ -1,4 +1,3 @@
-
 # Plugin para Magento 1.6.x 1.7.x y 1.8.x
 
 Este modulo provee el servicio de ComproPago para poder generar intensiones de pago dentro de la plataforma Magento.
@@ -10,64 +9,56 @@ Este modulo provee el servicio de ComproPago para poder generar intensiones de p
 
 
 <a name="install"></a>
-## Installation:
+## Instalación:
 
-1. Copy the folders **app**, **skin** and **js** to the Magento root installation. Make sure to keep the Magento folders structure intact.
-2. In your admin go to **System > Cache Management** and clear all caches.
+1. Copiar los directorios **app**, **skin** y **js** en el mismo orden, en directorio raiz de Magento. Asegurate de mantener la estructura en los directorios.
+2. En el panel de administración ir a **System > Cache Management** y limpiar la cache de todos los directorios.
 
-	![Installation Instructions](https://raw.github.com/mercadopago/cart-magento/master/README.img/installation.png)<br />
-3. Go to **System>IndexManagement** and select all fields. Then click in **Reindex Data**.
+	![Cache Management](https://raw.github.com/compropago/plugin-magento/master/README.img/3.png)<br />
+3. Ir a **System>IndexManagement** seleccionar todos los directorios y dar  click en **Reindex Data** y  **Submit**.
 
-	![Index Managment](https://raw.github.com/mercadopago/cart-magento/master/README.img/indexmanagment.png)
+	![Index Managment](https://raw.github.com/compropago/plugin-magento/master/README.img/4.png)
 
 ---
 
 <a name="howto"></a>
-## How does the MercadoPago Checkout Express work?
-At the shopping cart, the customer can click on “Buy Now” and a light box will open. In this Light Box the customer can insert their Postal Code and the module utilizes Magento Shipping modules to calculate the shipping price.
-After the customer chose the shipping option an order is generated and a MercadoPago checkout page takes place, allowing the customer to make the payment.  After the payment is done, the customer clicks on redirect and again on the store to fill the shipping information.
-The Store will receive the customer name related to this order, and the customer email by the IPN (Instant Payment Notification) making sure that this order are not getting lost in the store.
+## ¿Cómo trabaja el modulo?
+Una vez que el cliente sabe que comprar y continua con el proceso de compra entrará a la opción de elegir metodo de pago justo aqui aparece la opción de pagar con ComproPago<br /><br />
+![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/15.png)
+<br />
+Una vez que el cliente completa su orden de compra iniciara el proceso para generar su intensión de pago, el cliente selecciona el establecimiento y recibe las instrucciones para realizar el pago.
+![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/16.png) 
+<br /><br />
+Una vez que el cliente genero su intención de pago, dentro del panel de control de ComproPago la orden se muestra como "PENDIENTE" esto significa que el usuario esta por ir a hacer el deposito.
 
-![How the MercadoPago Checkout Express works?](https://raw.github.com/mercadopago/cart-magento/master/README.img/howto.png)
- 
-##### Can I disable Checkout Express?
-Yes.  You can disable it at the Store Administration
+![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/19.png) 
+---
+<a name="setup"></a>
+## Configurar ComproPago
+
+1. Para iniciar la configuración ir a **System > Configuration > Sales > Payment Methods**. Seleccionar **ComproPago**.
+
+2. Agregar la **llave privada** y **llave pública**, esta se puede encontrar en el apartado de configuración dentro del panel de control de ComproPago. [https://compropago.com/panel/configuracion](https://compropago.com/panel/configuracion)
+<br />
+![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/7.png) 
+3. Agregar la URL de exito y fallido, para este caso se cambiara en ambos casos solo el nombre de dominio y el directorio raíz donde se instalo Magento.
+***Note:*** La dirección estandar es ***[direcciondetusitio.com]***/index.php/checkout/onepage/success/ 
+
+![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/8.png) 
 
 ---
 
-<a name="Setup"></a>
-## Setup MercadoPago
+<a name="webhook"></a>
+## Sincronización con la notificación Webhook
 
-1. Go to **System > Configuration > Sales > Payment Methods**. Select **MercadoPago**.
+1. Ir al area de **Webhooks** en ComproPago [https://compropago.com/panel/webhooks](https://compropago.com/panel/webhooks)
 
-2. Set your Country to the same where your account was created on, and save config.
+2. Introducir la dirección: ***[direcciondetusitio.com]***/index.php/mpexpress/webhook/
+![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/9.png)
 
-	***Note:*** If you change the Country where your account was created you need save config to refresh the excluded payment methods.
-
-
-3. Set your **CLIENT_ID** and **CLIENT_SECRET**.
-
-Get your **CLIENT_ID** and **CLIENT_SECRET** in the following address:
-* Argentina: [https://www.mercadopago.com/mla/herramientas/aplicaciones](https://www.mercadopago.com/mla/herramientas/aplicaciones)
-* Mexico: [https://www.mercadopago.com/mlm/herramientas/aplicaciones](https://www.mercadopago.com/mlm/herramientas/aplicaciones)
-* Brazil: [https://www.mercadopago.com/mlb/ferramentas/aplicacoes](https://www.mercadopago.com/mlb/ferramentas/aplicacoes)
-* Venezuela: [https://www.mercadopago.com/mlv/herramientas/aplicaciones](https://www.mercadopago.com/mlv/herramientas/aplicaciones)
-
-![setup 1](https://raw.github.com/mercadopago/cart-magento/master/README.img/setup.png)<br />
-![setup 2](https://raw.github.com/mercadopago/cart-magento/master/README.img/setup2.png)<br />
-
-
-***Note:*** The standard URL for successful payment or pending payment is ***[yourstoreaddress.com]***/index.php/checkout/onepage/success/ but you can use any page as you want.
+3. Dar click en el botón "Probar" y verificamos que el servidor de la tienda esta respondiendo, debera aparecer el mensaje de "Order not valid"
+![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/10.png)
 
 ---
 
-<a name="IPN"></a>
-## Sync your backoffice with Mercadopago (IPN) 
-
-1. Go to **Mercadopago IPN configuration**:
-    * Argentina: [https://www.mercadopago.com/mla/herramientas/notificaciones](https://www.mercadopago.com/mla/herramientas/notificaciones)
-    * Mexico: [https://www.mercadopago.com/mlm/herramientas/notificaciones](https://www.mercadopago.com/mlm/herramientas/notificaciones)
-    * Brasil: [https://www.mercadopago.com/mlb/ferramentas/notificacoes](https://www.mercadopago.com/mlb/ferramentas/notificacoes)
-    * Venezuela: [https://www.mercadopago.com/mlv/herramientas/notificaciones](https://www.mercadopago.com/mlv/herramientas/notificaciones)
-
-2. Enter the URL as follow: ***[yourstoreaddress.com]***/index.php/mpexpress/ipn/
+Una vez completado estos pasos el proceso de instalación queda completado.
