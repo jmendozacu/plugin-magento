@@ -53,7 +53,7 @@ Una vez que el cliente genero su intención de pago, dentro del panel de control
 
 1. Ir al area de **Webhooks** en ComproPago [https://compropago.com/panel/webhooks](https://compropago.com/panel/webhooks)
 
-2. Introducir la dirección: ***[direcciondetusitio.com]***/index.php/mpexpress/webhook/
+2. Introducir la dirección: ***[direcciondetusitio.com]***/index.php/cpfaster/webhook/
 ![ComproPago](https://raw.github.com/compropago/plugin-magento/master/README.img/9.png)
 
 3. Dar click en el botón "Probar" y verificamos que el servidor de la tienda esta respondiendo, debera aparecer el mensaje de "Order not valid"
